@@ -4,7 +4,7 @@
  
 ![image](https://user-images.githubusercontent.com/38450758/209392230-1804188c-b498-4be2-be60-e1bb44e0fe6b.png)
 
-We can use any lightweight tool to create a Kubernetes cluster on our local machine like: 
+**We can use any lightweight tool to create a Kubernetes cluster on our local machine like:** 
 
 •	Docker Desktop free docker product
 
@@ -26,35 +26,35 @@ as they would not need to deal with complication of setting up multi node Kubern
 
 •	**Windows**
 
-export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/windows/amd64/kubectl.exe
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/windows/amd64/kubectl.exe
 
-chmod +x kubectl.exe
+    chmod +x kubectl.exe
 
-mkdir -p $HOME/bin/
+    mkdir -p $HOME/bin/
 
-mv kubectl $HOME/bin/
+    mv kubectl $HOME/bin/
 
 •	**Linux**
 
-export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/linux/amd64/kubectl
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/linux/amd64/kubectl
 
-chmod +x kubectl
+    chmod +x kubectl
 
-mv kubectl /usr/local/bin/
+    mv kubectl /usr/local/bin/
 
 •	**MacOS**
 
-export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    export VER=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/darwin/amd64/kubectl
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$VER/bin/darwin/amd64/kubectl
 
-chmod +x kubectl
+    chmod +x kubectl
 
-mv kubectl /usr/local/bin/
+    mv kubectl /usr/local/bin/
 
 
 **Installing Docker Desktop**
@@ -66,6 +66,7 @@ Start a PowerShell Administrator privileges and run the following to install WSL
     dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
     dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
 
 **Restart the windows machine then download the WSL2 from WSL2**
 
@@ -99,65 +100,59 @@ version of Kubernetes called k3s and runs it within a Docker container, meaning 
 **Installing k3d**
 
 ![image](https://user-images.githubusercontent.com/38450758/209396479-42ba05d9-4860-4dc4-897d-e7d23c62bf55.png)
-
- 
 The easiest way to get k3d running on Windows is with Chocolatey. To install Chocolatey package, we can run the following 
 commands with admin privileges in PowerShell:
 
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 **Now close PowerShell and open a new administrative instance and run the following to install k3d and a couple other useful tools:**
 
-choco install k3d -y
+    choco install k3d -y
 
-choco install jq -y
+    choco install jq -y
 
-choco install yq -y
+    choco install yq -y
 
-choco install kubernetes-helm -y
+    choco install kubernetes-helm -y
 
 
 **Now let’s configure tab completion for k3d:**
 
 **Create user profile file if it doesn't exist**
 
-if ( -not ( Test-Path $Profile ) ) { New-Item -Path $Profile -Type File -Force }
+    if ( -not ( Test-Path $Profile ) ) { New-Item -Path $Profile -Type File -Force }
 
 **Append the k3d completion to the end of the user profile**
 
-k3d completion powershell | Out-File -Append $Profile
+    k3d completion powershell | Out-File -Append $Profile
 
 **To see running containers**
 
-$ docker container ps       
+    $ docker container ps       
 
 ![image](https://user-images.githubusercontent.com/38450758/209396584-e54928f3-ceff-41b1-87a1-316bc1f56907.png)
-
-
 1.	Rancher/k3d-proxy: This is a Helper Container Image that supports some functionality of k3d
 
 2.	Rancher/k3s:latest: Servers and Agents
 
 **Create cluster using k3d in power shell without admin privileges or use Gitbash for better result**
 
-$ k3d cluster create <Cluster-Name>
+    $ k3d cluster create <Cluster-Name>
 
-$ Move-Item ~\.kube\config.k3d* ~\.kube\config -Force
+    $ Move-Item ~\.kube\config.k3d* ~\.kube\config -Force
 
 **List the Kubernetes nodes**
     
-$ kubectl get nodes --output wide
+    $ kubectl get nodes --output wide
     
 ![image](https://user-images.githubusercontent.com/38450758/209396650-0de22e5f-72ed-4ccc-a948-585ffa68eda6.png)
 
  
 **All Kubernetes cluster nodes run as containers in docker.**
 
-$ docker container ls
+    $ docker container ls
     
 ![image](https://user-images.githubusercontent.com/38450758/209396693-1c76637d-e0ff-4081-a8a5-6c4cf395c91d.png)
-
- 
 We can see two containers by default: a k3s instance and the k3d proxy. The k3d proxy is used to route traffic
 in to the API server, which we can see configured by looking at ~/.kube/config, where we may see something like 
 server: https://0.0.0.0:52038, which would be the same port that Docker shows as routing to port 6443 of the k3d 
@@ -168,21 +163,21 @@ realistically test out taints, tolerations, affinity rules, etc. To create a mul
 
 **Delete the existing cluster**
     
-$ k3d cluster delete <Cluster-Name>
+    $ k3d cluster delete <Cluster-Name>
 
 **Create a new multi-node cluster**
     
-$ k3d cluster create <Cluster-Name> --servers 2 --agents 3 --port "8888:80@loadbalancer" --port "8889:443@loadbalancer"
+    $ k3d cluster create <Cluster-Name> --servers 2 --agents 3 --port "8888:80@loadbalancer" --port "8889:443@loadbalancer"
 
 **Rename the config if needed**
     
-$ if ( Test-Path ~\.kube\config.k3d* ) { Move-Item ~\.kube\config.k3d* ~\.kube\config -Force }
+    $ if ( Test-Path ~\.kube\config.k3d* ) { Move-Item ~\.kube\config.k3d* ~\.kube\config -Force }
 
 **List the Kubernetes nodes**
     
-$ kubectl get nodes --output wide
+    $ kubectl get nodes --output wide
 
 **We can see the nodes in docker**
     
-$ docker container ls
+    $ docker container ls
 
