@@ -16,6 +16,7 @@
 
 •	MicroK8s Open source project maintained by Canonical
 
+
 **In this lab we are going to use K3D for creating Kubernetes cluster**
 
 **K3D** is a lightweight wrapper to run k3s with docker. Unlike k3s, docker containers can be used to create Kubernetes nodes. 
@@ -57,6 +58,7 @@ as they would not need to deal with complication of setting up multi node Kubern
     mv kubectl /usr/local/bin/
 
 
+
 **Installing Docker Desktop**
 
 **Note**: We need to install WSL2 on windows system
@@ -84,6 +86,7 @@ At this point you may as well launch and set up your distro, which will likely b
 name and password. If you have a common username on other systems that you will likely be connecting to, it may be desirable 
 to use that as your username in your Linux distro, but ultimately, you can use whatever username you want.
 
+
 **Docker Desktop**
 
 We can go to the main product page and look for a specific version. Whichever way we install it, make sure you select the 
@@ -96,6 +99,8 @@ log in, it will save the resources also.
 
 **Note**: If we have Docker on our laptop, then we can use the k3d tool, hosted by Rancher Labs. It installs a lightweight 
 version of Kubernetes called k3s and runs it within a Docker container, meaning it will work on any computer that has Docker.
+
+
 
 **Installing k3d**
 
@@ -135,11 +140,13 @@ commands with admin privileges in PowerShell:
 
 2.	Rancher/k3s:latest: Servers and Agents
 
+
 **Create cluster using k3d in power shell without admin privileges or use Gitbash for better result**
 
     $ k3d cluster create <Cluster-Name>
 
     $ Move-Item ~\.kube\config.k3d* ~\.kube\config -Force
+
 
 **List the Kubernetes nodes**
     
@@ -161,9 +168,11 @@ proxy container.
 However, the main reason I want to use k3d instead of minikube is that I want to have multiple nodes so that I can 
 realistically test out taints, tolerations, affinity rules, etc. To create a multi-node system. 
 
+
 **Delete the existing cluster**
     
     $ k3d cluster delete <Cluster-Name>
+
 
 **Create a new multi-node cluster**
     
