@@ -190,3 +190,13 @@ realistically test out taints, tolerations, affinity rules, etc. To create a mul
     
     $ docker container ls
 
+<br>
+
+**If you want to deploy OpenFaaS (Serverless) in this kubernetes cluster then follow below link**
+
+Click here [How to deploy OpenFaaS](https://github.com/santoshcisco/OpenFaaS/blob/main/README.md)
+
+<br>
+<br>
+<br>
+<br>
